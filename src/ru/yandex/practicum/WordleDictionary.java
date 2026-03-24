@@ -12,13 +12,12 @@ public class WordleDictionary {
 
     public WordleDictionary(List<String> words) {
         this.words = words;
+        changeWordsList();
     }
 
-    public List<String> changeWordsList() {
+    public void changeWordsList() {
         words.removeIf(word -> word.length() != 5);
         words.replaceAll(word -> word.toLowerCase().replace("ё", "е"));
-
-        return words;
     }
 
     public List<String> getWords() {
