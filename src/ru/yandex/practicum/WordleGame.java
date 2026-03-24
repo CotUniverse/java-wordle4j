@@ -1,5 +1,6 @@
 package ru.yandex.practicum;
 
+import java.io.PrintWriter;
 import java.util.*;
 
 /*
@@ -24,9 +25,11 @@ public class WordleGame {
 
     private final Map<String, String> wrongWords = new LinkedHashMap<>();
 
+    private final PrintWriter log;
 
-    public WordleGame(WordleDictionary dictionary) {
+    public WordleGame(WordleDictionary dictionary, PrintWriter log) {
         this.dictionary = dictionary;
+        this.log = log;
     }
 
     public String checkWord(String input) {
@@ -39,6 +42,9 @@ public class WordleGame {
         }
 
         steps--;
+
+        log.println(input + " " + answer);
+        log.flush();
 
         return suggestHint(input, answer);
     }
