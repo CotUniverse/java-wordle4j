@@ -1,7 +1,6 @@
 package ru.yandex.practicum;
 
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 /*
 в этом классе хранится словарь и состояние игры
@@ -23,6 +22,8 @@ public class WordleGame {
 
     private final WordleDictionary dictionary;
 
+    private final Map<String, String> wrongWords = new LinkedHashMap<>();
+
     Scanner scanner = new Scanner(System.in);
 
     public WordleGame(WordleDictionary dictionary) {
@@ -30,22 +31,32 @@ public class WordleGame {
     }
 
     public void wordleGame() {
+        if (dictionary.getWords().isEmpty()) {
+            throw new IllegalStateException("Словарь пуст, играть невозможно!");
+        }
 
         Random random = new Random();
         int randomIndex = random.nextInt(dictionary.getWords().size());
         answer = dictionary.getWords().get(randomIndex);
-        System.out.println(answer);
-        while (steps >= 0) {
+
+        while (steps > 0) {
             System.out.println("Введите слово");
             String inputWord = scanner.nextLine();
-            if (inputWord.equals(answer)) {
+            if (inputWord.length() != answer.length()) {
+                System.out.println("Ошибка! Слово должно содержать " + answer.length() + " букв.");
+            } else if (inputWord.equals(answer)) {
                 System.out.println("Урааа! Вы угадали слово!!!!");
                 break;
+            } else if (inputWord.isEmpty()) {
+                printWrongWords(wrongWords);
             } else {
                 System.out.println(suggestHint(inputWord, answer));
                 steps--;
             }
         }
+
+        if (steps == 0)
+            System.out.println("Вы проиграли. Правильное слово - " + answer);
     }
 
     private String suggestHint(String inputWord, String targetWord) {
@@ -60,6 +71,14 @@ public class WordleGame {
             }
         }
 
+        wrongWords.put(inputWord, sb.toString());
         return sb.toString();
+    }
+
+    private void printWrongWords(Map<String, String> wrongWords) {
+        for (String word : wrongWords.keySet()) {
+            String hint = wrongWords.get(word);
+            System.out.println(word + " " + hint);
+        }
     }
 }
