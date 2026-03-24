@@ -32,7 +32,7 @@ public class Wordle {
 
             while (wordleGame.hasSteps()) {
                 System.out.println("Введите слово");
-                String input = scanner.nextLine();
+                String input = scanner.nextLine().toLowerCase();
 
                 String hint = wordleGame.checkWord(input);
                 if (hint.equals("+++++")) {
