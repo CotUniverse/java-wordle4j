@@ -14,6 +14,11 @@ import java.nio.charset.StandardCharsets;
  */
 public class WordleDictionaryLoader {
     private final Charset standardCharsets = StandardCharsets.UTF_8;
+    private PrintWriter log;
+
+    public WordleDictionaryLoader(PrintWriter log) {
+        this.log = log;
+    }
 
     public WordleDictionary openDictionary(String fileName) {
         List<String> wordleDictionary = new ArrayList<>();
@@ -26,6 +31,7 @@ public class WordleDictionaryLoader {
             System.out.println("Ошибка при чтении." + fileName);
         }
 
+        log.println("В файл добавлено " + wordleDictionary.size() + " слов");
         return new WordleDictionary(wordleDictionary);
     }
 
