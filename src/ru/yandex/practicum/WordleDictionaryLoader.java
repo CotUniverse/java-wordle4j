@@ -15,13 +15,12 @@ import java.nio.charset.StandardCharsets;
 public class WordleDictionaryLoader {
     private final Charset standardCharsets = StandardCharsets.UTF_8;
 
-    public WordleDictionary openDictionary()  {
-        List <String> wordleDictionary = new ArrayList<>();
-        String fileName = "words_ru.txt";
+    public WordleDictionary openDictionary(String fileName) {
+        List<String> wordleDictionary = new ArrayList<>();
 
         try (BufferedReader br = Files.newBufferedReader(Paths.get(fileName), standardCharsets)) {
             while (br.ready()) {
-               wordleDictionary.add(br.readLine());
+                wordleDictionary.add(br.readLine());
             }
         } catch (IOException e) {
             System.out.println("Ошибка при чтении." + fileName);
