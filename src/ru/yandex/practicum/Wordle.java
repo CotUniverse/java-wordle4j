@@ -20,7 +20,7 @@ public class Wordle {
 
         try (PrintWriter logWriter = new PrintWriter(new FileWriter("game.log", true));){
 
-            WordleDictionaryLoader loader = new WordleDictionaryLoader();
+            WordleDictionaryLoader loader = new WordleDictionaryLoader(logWriter);
 
             WordleDictionary myDictionary = loader.openDictionary(fileName);
 

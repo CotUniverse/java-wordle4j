@@ -32,7 +32,7 @@ public class WordleDictionaryLoader {
         }
 
         log.println("В файл добавлено " + wordleDictionary.size() + " слов");
-        return new WordleDictionary(wordleDictionary);
+        return new WordleDictionary(wordleDictionary, log);
     }
 
 }
