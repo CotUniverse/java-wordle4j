@@ -1,8 +1,10 @@
 package ru.yandex.practicum;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+
 /*
 в главном классе нам нужно:
     создать лог-файл (он должен передаваться во все классы)
@@ -18,7 +20,7 @@ public class Wordle {
         Scanner scanner = new Scanner(System.in);
         String fileName = "words_ru.txt";
 
-        try (PrintWriter logWriter = new PrintWriter(new FileWriter("game.log", true));){
+        try (PrintWriter logWriter = new PrintWriter(new FileWriter("game.log", true));) {
 
             WordleDictionaryLoader loader = new WordleDictionaryLoader(logWriter);
 
@@ -36,8 +38,7 @@ public class Wordle {
                 if (hint.equals("+++++")) {
                     System.out.println("Вы победили!");
                     break;
-                }
-                else {
+                } else {
                     System.out.println(hint);
                 }
             }
