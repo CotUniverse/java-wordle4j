@@ -24,23 +24,29 @@ public class WordleGame {
 
     private final WordleDictionary dictionary;
 
-    private final Map<String, String> wrongWords = new LinkedHashMap<>();
-
     private final PrintWriter log;
+
+    private final Set<Character> absentLetters = new HashSet<>();
+
+    private final Map<Integer, Character> confirmedLetters = new LinkedHashMap<>();
+
+    private final Set<Character> presentLetters = new HashSet<>();
 
     public WordleGame(WordleDictionary dictionary, PrintWriter log) {
         this.dictionary = dictionary;
         this.log = log;
     }
 
-    public String checkWord(String input) throws DictionaryException {
+    public String checkWord(String input) throws DictionaryException, WordNotFoundInDictionary, WrongWordLengthException {
         if (dictionary.getWords().isEmpty()) {
             throw new DictionaryException("Словарь пуст, играть невозможно!");
         }
 
-        if (input.isBlank()) {
-            printWrongWords(wrongWords);
+        if (input.isEmpty()) {
+            String suggested = autoSuggest();
+            return checkWord(suggested);
         }
+
         String hint = suggestHint(input, answer);
 
         steps--;
@@ -57,36 +63,64 @@ public class WordleGame {
     }
 
     private String suggestHint(String inputWord, String targetWord)
-            throws WrongWordLengthException, WordNotFoundInDictionary {
-        if (inputWord.length() != targetWord.length()) {
-            throw new WrongWordLengthException("Слово должно быть из 5 букв");
-        }
+            throws WordNotFoundInDictionary {
 
         if (!dictionary.getWords().contains(inputWord)) {
             throw new WordNotFoundInDictionary("Введеное вами слово отсутсвует в словаре");
         }
 
+        if (inputWord.length() != 5) {
+            throw new WrongWordLengthException("Слово должно быть из 5 букв");
+        }
+
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < targetWord.length(); i++) {
-            if (targetWord.charAt(i) == inputWord.charAt(i)) {
+            char current = inputWord.charAt(i);
+            if (targetWord.charAt(i) == current) {
+                confirmedLetters.put(i, current);
                 sb.append("+");
-            } else if (targetWord.indexOf(inputWord.charAt(i)) != -1) {
+            } else if (targetWord.indexOf(current) != -1) {
+                presentLetters.add(current);
                 sb.append("^");
             } else {
+                absentLetters.add(current);
                 sb.append("-");
             }
         }
 
-        wrongWords.put(inputWord, sb.toString());
         return sb.toString();
     }
 
-    public void printWrongWords(Map<String, String> wrongWords) {
-        for (String word : wrongWords.keySet()) {
-            String hint = wrongWords.get(word);
-            System.out.println(word + " " + hint);
+    public String autoSuggest() {
+        List<String> allWords = dictionary.getWords();
+        List<String> possibleWords = new ArrayList<>();
+
+        for (String word : allWords) {
+            if (isWordMatching(word)) {
+                possibleWords.add(word);
+            }
         }
+
+        return possibleWords.get(random.nextInt(possibleWords.size()));
+    }
+
+    public boolean isWordMatching(String word) {
+        for (char c : word.toCharArray()) {
+            if (absentLetters.contains(c))
+                return false;
+        }
+
+        for (Map.Entry<Integer, Character> entry : confirmedLetters.entrySet()) {
+            if (word.charAt(entry.getKey()) != entry.getValue())
+                return false;
+        }
+
+        for (char c : presentLetters) {
+            if (word.indexOf(c) == -1) return false;
+        }
+
+        return true;
     }
 
     public boolean hasSteps() {
