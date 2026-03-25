@@ -16,6 +16,7 @@ import java.util.*;
 не забудьте про специальные типы исключений для игровых и неигровых ошибок
  */
 public class WordleGame {
+    Random random = new Random();
 
     private String answer;
 
@@ -32,31 +33,41 @@ public class WordleGame {
         this.log = log;
     }
 
-    public String checkWord(String input) {
+    public String checkWord(String input) throws DictionaryException {
         if (dictionary.getWords().isEmpty()) {
-            throw new IllegalStateException("Словарь пуст, играть невозможно!");
+            throw new DictionaryException("Словарь пуст, играть невозможно!");
         }
 
-        if (input.isEmpty()) {
+        if (input.isBlank()) {
             printWrongWords(wrongWords);
         }
+        String hint = suggestHint(input, answer);
 
         steps--;
 
         log.println(input + " " + answer);
         log.flush();
 
-        return suggestHint(input, answer);
+        return hint;
     }
 
     public void getRandomWord() {
-        Random random = new Random();
         int randomIndex = random.nextInt(dictionary.getWords().size());
         answer = dictionary.getWords().get(randomIndex);
     }
 
-    private String suggestHint(String inputWord, String targetWord) {
+    private String suggestHint(String inputWord, String targetWord)
+            throws WrongWordLengthException, WordNotFoundInDictionary {
+        if (inputWord.length() != targetWord.length()) {
+            throw new WrongWordLengthException("Слово должно быть из 5 букв");
+        }
+
+        if (!dictionary.getWords().contains(inputWord)) {
+            throw new WordNotFoundInDictionary("Введеное вами слово отсутсвует в словаре");
+        }
+
         StringBuilder sb = new StringBuilder();
+
         for (int i = 0; i < targetWord.length(); i++) {
             if (targetWord.charAt(i) == inputWord.charAt(i)) {
                 sb.append("+");
