@@ -20,7 +20,7 @@ public class WordleDictionaryLoader {
         this.log = log;
     }
 
-    public WordleDictionary openDictionary(String fileName) {
+    public WordleDictionary openDictionary(String fileName) throws IOException {
         List<String> wordleDictionary = new ArrayList<>();
 
         try (BufferedReader br = Files.newBufferedReader(Paths.get(fileName), standardCharsets)) {
@@ -30,6 +30,7 @@ public class WordleDictionaryLoader {
         } catch (IOException e) {
             log.println("Ошибка открытия файла " + fileName);
             System.out.println("Ошибка при чтении. " + fileName);
+            throw e;
         }
 
         log.println("В файл добавлено " + wordleDictionary.size() + " слов");
