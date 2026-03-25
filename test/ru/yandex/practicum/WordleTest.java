@@ -21,7 +21,9 @@ class WordleTest {
             WordleGame wordleGame = new WordleGame(myDictionary, logWriter);
             wordleGame.getRandomWord();
             Assertions.assertEquals("+++++", wordleGame.checkWord("гамаг"));
-            Assertions.assertEquals("^+^--", wordleGame.checkWord("маарт"));
+            Assertions.assertThrows(WordNotFoundInDictionary.class, () -> {
+                wordleGame.checkWord("маарт");
+            }, "При отсутствии слова в словаре выводится exception");
         }
     }
 
@@ -31,8 +33,9 @@ class WordleTest {
             WordleDictionaryLoader loader = new WordleDictionaryLoader(logWriter);
 
             Assertions.assertNotNull(loader.openDictionary("words_ru.txt"));
-            Assertions.assertTrue(loader.openDictionary("words_en.txt").getWords().isEmpty(),
-                    "Ожидается пустой словарь для несуществующего файла");
+            Assertions.assertThrows(IOException.class, () -> {
+                loader.openDictionary("words_en.txt");
+            }, "Если файла нет, выводится exception");
         }
     }
 
