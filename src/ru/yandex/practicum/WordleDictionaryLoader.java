@@ -28,7 +28,8 @@ public class WordleDictionaryLoader {
                 wordleDictionary.add(br.readLine());
             }
         } catch (IOException e) {
-            System.out.println("Ошибка при чтении." + fileName);
+            log.println("Ошибка открытия файла " + fileName);
+            System.out.println("Ошибка при чтении. " + fileName);
         }
 
         log.println("В файл добавлено " + wordleDictionary.size() + " слов");

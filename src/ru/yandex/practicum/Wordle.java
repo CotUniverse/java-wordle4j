@@ -33,17 +33,20 @@ public class Wordle {
             while (wordleGame.hasSteps()) {
                 System.out.println("Введите слово");
                 String input = scanner.nextLine().toLowerCase();
-
-                String hint = wordleGame.checkWord(input);
-                if (hint.equals("+++++")) {
-                    System.out.println("Вы победили!");
-                    break;
+                if (input.length() == 5) {
+                    String hint = wordleGame.checkWord(input);
+                    if (hint.equals("+++++")) {
+                        System.out.println("Вы победили!");
+                        break;
+                    } else {
+                        System.out.println(hint);
+                    }
                 } else {
-                    System.out.println(hint);
+                    System.out.println("Слово должно быть из 5 букв");
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("Прозошла ошибка");;
         }
 
     }
