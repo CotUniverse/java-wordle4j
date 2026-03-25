@@ -46,7 +46,8 @@ public class Wordle {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Прозошла ошибка");;
+            System.out.println("Прозошла ошибка");
+            ;
         }
 
     }
