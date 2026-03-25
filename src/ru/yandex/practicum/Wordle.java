@@ -35,6 +35,7 @@ public class Wordle {
                 try {
                     String input = scanner.nextLine().toLowerCase();
                     String hint = wordleGame.checkWord(input);
+
                     if (hint.equals("+++++")) {
                         System.out.println("Вы победили!");
                         break;
