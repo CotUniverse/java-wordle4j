@@ -20,7 +20,6 @@ public class Wordle {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-
         try (PrintWriter logWriter = new PrintWriter(new FileWriter("game.log", true));) {
 
             WordleDictionaryLoader loader = new WordleDictionaryLoader(logWriter);
@@ -33,8 +32,8 @@ public class Wordle {
 
             while (wordleGame.hasSteps()) {
                 System.out.println("Введите слово");
-                String input = scanner.nextLine().toLowerCase();
-                if (input.length() == 5) {
+                try {
+                    String input = scanner.nextLine().toLowerCase();
                     String hint = wordleGame.checkWord(input);
                     if (hint.equals("+++++")) {
                         System.out.println("Вы победили!");
@@ -42,11 +41,12 @@ public class Wordle {
                     } else {
                         System.out.println(hint);
                     }
-                } else {
-                    System.out.println("Слово должно быть из 5 букв");
+
+                } catch (WordNotFoundInDictionary | WrongWordLengthException e) {
+                    System.out.println(e.getMessage());
                 }
             }
-        } catch (IOException e) {
+        } catch (DictionaryException | IOException e) {
             System.out.println("Прозошла ошибка");
         }
 
