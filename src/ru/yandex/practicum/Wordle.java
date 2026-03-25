@@ -15,16 +15,17 @@ import java.util.*;
     вывести состояние игры и конечный результат
  */
 public class Wordle {
+    public static final String FILE_NAME = "words_ru.txt";
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String fileName = "words_ru.txt";
+
 
         try (PrintWriter logWriter = new PrintWriter(new FileWriter("game.log", true));) {
 
             WordleDictionaryLoader loader = new WordleDictionaryLoader(logWriter);
 
-            WordleDictionary myDictionary = loader.openDictionary(fileName);
+            WordleDictionary myDictionary = loader.openDictionary(FILE_NAME);
 
             WordleGame wordleGame = new WordleGame(myDictionary, logWriter);
 
@@ -47,7 +48,6 @@ public class Wordle {
             }
         } catch (IOException e) {
             System.out.println("Прозошла ошибка");
-            ;
         }
 
     }
