@@ -43,8 +43,11 @@ public class WordleGame {
         }
 
         if (input.isEmpty()) {
-            String suggested = autoSuggest();
-            return checkWord(suggested);
+            return autoSuggest();
+        }
+
+        if (input.length() != 5) {
+            throw new WrongWordLengthException("Слово должно быть из 5 букв");
         }
 
         String hint = suggestHint(input, answer);
@@ -67,10 +70,6 @@ public class WordleGame {
 
         if (!dictionary.getWords().contains(inputWord)) {
             throw new WordNotFoundInDictionary("Введеное вами слово отсутсвует в словаре");
-        }
-
-        if (inputWord.length() != 5) {
-            throw new WrongWordLengthException("Слово должно быть из 5 букв");
         }
 
         StringBuilder sb = new StringBuilder();
