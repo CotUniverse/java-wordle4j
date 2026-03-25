@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class WordleTest {
 
     @Test
-    void testCheckWord() throws IOException {
+    void testCheckWord() throws IOException, DictionaryException {
         try (PrintWriter logWriter = new PrintWriter(new FileWriter("test_game.log", true))) {
             List<String> words = new ArrayList<>(List.of("гамаг"));
             WordleDictionary myDictionary = new WordleDictionary(words, logWriter);
